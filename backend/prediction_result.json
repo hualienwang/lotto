@@ -1,0 +1,16 @@
+{
+  "predictions": [
+    {
+      "prediction_date": "2026-03-15",
+      "prediction_time": "09:00",
+      "tiangan_dizhi": "丙午",
+      "lucky_hours": [
+        9,
+        11,
+        13
+      ],
+      "numbers": "02, 08, 15, 30, 31",
+      "created_at": "2026-03-14 14:15:13"
+    }
+  ]
+}

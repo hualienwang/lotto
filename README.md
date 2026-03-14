@@ -1,197 +1,148 @@
-# 台灣彩券539開獎系統 (Lotto 539 System)
+# 台灣彩券539開獎系統
 
-[![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4.18.x-blue.svg)](https://expressjs.com/)
-[![SQLite3](https://img.shields.io/badge/SQLite-3-yellow.svg)](https://www.sqlite.org/)
+一個現代化的台灣彩券539開獎資訊系統，提供開獎結果查詢、號碼預測及數據分析功能。
 
-一個基於 Node.js 和 Express 建構的台灣彩券539開獎號碼管理系統，提供開獎結果查詢、號碼預測及統計分析功能。
+## 技術架構
 
-## 功能特色
+### 前端
+- **Framework**: Vue 3 (Composition API)
+- **Build Tool**: Vite
+- **State Management**: Pinia
+- **Router**: Vue Router
+- **HTTP Client**: Axios
 
-- 📊 **開獎結果管理** - 查詢、新增台灣彩券539開獎號碼
-- 🔮 **號碼預測** - 根據歷史開獎資料分析熱門號碼
-- 📈 **統計分析** - 號碼出現頻率、奇偶比、區間分佈
-- 🌐 **RESTful API** - 完整的 API 介面供前端呼叫
-- 💾 **SQLite 資料庫** - 輕量級本地資料儲存
-
-## 技術棧
-
-| 技術 | 版本 | 說明 |
-|------|------|------|
-| Node.js | 18.x+ | JavaScript 執行環境 |
-| Express | ^4.18.2 | Web 框架 |
-| SQLite3 | ^5.1.6 | 嵌入式資料庫 |
-| CORS | ^2.8.5 | 跨域資源共享 |
+### 後端
+- **Framework**: FastAPI
+- **ORM**: SQLModel
+- **Database**: SQLite3
 
 ## 專案結構
 
 ```
-lotto/
-├── public/
-│   └── index.html      # 前端網頁介面
-├── server.js           # 主伺服器檔案
-├── lotto.db            # SQLite 資料庫檔案
-├── package.json        # 專案配置
-└── README.md           # 使用說明文件
+lotto539/
+├── backend/                 # Python 後端
+│   ├── main.py             # FastAPI 主程式
+│   ├── models.py           # SQLModel 資料模型
+│   ├── database.py         # 資料庫配置
+│   ├── requirements.txt    # Python 依賴
+│   └── lotto.db            # SQLite 資料庫
+│
+├── frontend/               # Vue 3 前端
+│   ├── src/
+│   │   ├── components/    # 共用元件
+│   │   ├── views/         # 頁面元件
+│   │   ├── stores/        # Pinia 狀態管理
+│   │   ├── services/     # API 服務
+│   │   ├── router/        # 路由配置
+│   │   └── assets/        # 靜態資源
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+│
+└── data/
+    └── lotto539_data.json  # 初始資料
 ```
+
+## 功能特色
+
+### 🔍 最新開獎
+- 顯示最新一期開獎結果
+- 清晰呈現五個中獎號碼
+
+### 📈 歷次開獎
+- 完整開獎歷史記錄
+- 支援日期區間篩選
+- 表格化呈現
+
+### 🔮 號碼預測
+- 根據歷史開獎數據進行大數據分析
+- 計算熱門號碼
+- 產生預測號碼組合
+
+### 📊 數據分析
+- 單數/雙數統計
+- 號碼區間分布 (1-10, 11-20, 21-30, 31-39)
+
+### ⚙️ 管理系統
+- 新增開獎結果
+- 資料管理
 
 ## 安裝與執行
 
 ### 前置需求
+- Python 3.10+
+- Node.js 18+
 
-- Node.js 18.x 或更高版本
-- npm 或 yarn
-
-### 安裝步驟
+### 後端安裝
 
 ```bash
-# 1. 安裝相依套件
-npm install
+# 進入後端目錄
+cd backend
 
-# 2. 啟動伺服器
-npm start
+# 建立虛擬環境
+python -m venv venv
+
+# 啟動虛擬環境
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+# 安裝依賴
+pip install -r requirements.txt
+
+# 啟動伺服器
+python main.py
 ```
 
-伺服器將於 `http://localhost:3000` 啟動。
+伺服器將在 `http://localhost:8000` 啟動
 
-### 開發模式
+### 前端安裝
 
 ```bash
+# 進入前端目錄
+cd frontend
+
+# 安裝依賴
+npm install
+
+# 啟動開發伺服器
 npm run dev
 ```
 
-## API 文件
+前端將在 `http://localhost:5173` 啟動
 
-### 1. 取得所有開獎結果
+###  production 建置
 
-```http
-GET /api/results
+```bash
+cd frontend
+npm run build
 ```
 
-**回應範例：**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "period": "1150312",
-      "numbers": "05, 12, 18, 25, 33",
-      "draw_date": "2026-03-12",
-      "created_at": "2026-03-12 10:00:00"
-    }
-  ]
-}
-```
+產生的檔案會在 `dist/` 目錄中
 
-### 2. 取得最新開獎結果
+## API 端點
 
-```http
-GET /api/results/latest
-```
-
-### 3. 新增開獎結果
-
-```http
-POST /api/results
-Content-Type: application/json
-
-{
-  "period": "1150313",
-  "numbers": "03, 07, 14, 22, 38",
-  "draw_date": "2026-03-13"
-}
-```
-
-### 4. 取得號碼預測
-
-```http
-GET /api/prediction
-```
-
-**回應範例：**
-```json
-{
-  "success": true,
-  "data": {
-    "numbers": "05, 12, 18, 25, 33",
-    "analysis": {
-      "hot_numbers": [5, 12, 18, 25, 33, ...],
-      "frequency": { "5": 15, "12": 12, ... }
-    }
-  }
-}
-```
-
-### 5. 儲存預測
-
-```http
-POST /api/prediction
-Content-Type: application/json
-
-{
-  "period": "1150313",
-  "numbers": "05, 12, 18, 25, 33"
-}
-```
-
-### 6. 取得統計資料
-
-```http
-GET /api/statistics
-```
-
-**回應範例：**
-```json
-{
-  "success": true,
-  "data": {
-    "frequency": { "1": 15, "2": 12, ... },
-    "oddEven": { "odd": 250, "even": 200 },
-    "ranges": { "1-10": 120, "11-20": 110, "21-30": 130, "31-39": 90 }
-  }
-}
-```
-
-## 資料庫架構
-
-### lottery_results 資料表
-
-| 欄位 | 類型 | 說明 |
+| 端點 | 方法 | 說明 |
 |------|------|------|
-| id | INTEGER | 主鍵 ID |
-| period | TEXT | 開獎期別 (民國年+月日) |
-| numbers | TEXT | 開獎號碼 (5個號碼逗號分隔) |
-| draw_date | TEXT | 開獎日期 |
-| created_at | TEXT | 資料建立時間 |
+| `/api/results` | GET | 取得開獎結果列表 |
+| `/api/results/latest` | GET | 取得最新開獎結果 |
+| `/api/results` | POST | 新增開獎結果 |
+| `/api/prediction` | GET | 取得預測號碼 |
+| `/api/prediction` | POST | 儲存預測 |
+| `/api/statistics` | GET | 取得統計數據 |
 
-### predictions 資料表
+## 開發說明
 
-| 欄位 | 類型 | 說明 |
-|------|------|------|
-| id | INTEGER | 主鍵 ID |
-| period | TEXT | 預測期別 |
-| numbers | TEXT | 預測號碼 |
-| created_at | TEXT | 資料建立時間 |
+### 後端 API 開發
+後端使用 FastAPI 框架，所有路由定義在 `main.py` 中。
 
-## 開獎規則 (台灣彩券539)
+### 前端開發
+前端使用 Vue 3 Composition API，所有頁面元件在 `views/` 目錄中。
 
-- 每期開獎 5 個號碼（範圍 1-39）
-- 號碼不重複
-- 週日不開獎
-
-## 環境變數
-
-目前無需額外環境變數配置。如需自訂連接埠，可修改 [`server.js`](server.js:7) 中的 `PORT` 常數：
-
-```javascript
-const PORT = 3000; // 可自訂連接埠
-```
+### 資料庫
+系統使用 SQLite3 作為資料庫，自動從 `lotto539_data.json` 載入初始資料。
 
 ## 授權
 
 MIT License
-
----
-
-如有問題或建議，歡迎提交 Issue 或 Pull Request。
